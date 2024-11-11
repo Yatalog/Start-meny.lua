@@ -1,0 +1,386 @@
+local redzlib = loadstring(game:HttpGet("https://raw.githubusercontent.com/REDzHUB/RedzLibV5/main/Source.Lua"))()
+ local Window = redzlib:MakeWindow({
+  Title = "KFG Hub",
+  SubTitle = "By ROBLOXSCRIPT",
+  SaveFolder = "Redz Config"
+})
+local Tab1 = Window:MakeTab({"Credit", "Credit"})
+Tab1:AddButton({"Best channel", function()
+game:GetService("StarterGui"):SetCore("SendNotification",{
+	Title = "Notification", -- Required
+	Text = "https://t.me/snowwy_scriptrs", -- Required
+	Icon = "rbxassetid://" -- Optional
+})
+end})
+Tab1:AddButton({"My channel", function()
+game:GetService("StarterGui"):SetCore("SendNotification",{
+	Title = "Notification", -- Required
+	Text = "https://t.me/SCRIPTISHKARB", -- Required
+	Icon = "rbxassetid://" -- Optional
+})
+end})
+local Tab2 = Window:MakeTab({"Characters", "Slider"})
+Tab2:AddSlider({
+  Name = "Speed",
+  Min = 1,
+  Max = 1000,
+  Increase = 1,
+  Default = 16,
+  Callback = function(Value)
+  game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
+  end
+})
+Tab2:AddSlider({
+  Name = "Jump",
+  Min = 1,
+  Max = 1000,
+  Increase = 1,
+  Default = 16,
+  Callback = function(Value)
+  game.Players.LocalPlayer.Character.Humanoid.JumpPower= Value
+  end
+})
+local Tab3 = Window:MakeTab({"Farm", "Candy"})
+Tab3:AddButton({"Fastest farm", function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/ItsJiDy/Personal-Script/refs/heads/main/mm2%20halloween.lua"))()
+
+end})
+Tab3:AddButton({"Esp candy", function()
+local maps = {
+    "Factory",
+    "BioLab",
+    "House2",
+    "Hospital3",
+    "Workplace",
+    "MilBase",
+    "Bank2",
+    "Hotel2",
+    "Mansion2",
+    "Office3",
+    "PoliceStation",
+    "ResearchFacility",
+    "Hotel",
+    "VampireCastle"
+}
+
+while wait(0.5) do
+    for _, map in ipairs(maps) do
+        local coinContainer = game.Workspace:FindFirstChild(map) and game.Workspace[map]:FindFirstChild("CoinContainer")
+        if coinContainer then
+            for _, coin in ipairs(coinContainer:GetDescendants()) do
+                if coin.Name == "Coin_Server" and not coin:FindFirstChild("EspBox") then
+                    local esp = Instance.new("BoxHandleAdornment", coin)
+                    esp.Adornee = coin
+                    esp.ZIndex = 0
+                    esp.Size = Vector3.new(4, 5, 1)  -- Настройте размер по необходимости
+                    esp.Transparency = 0.65
+                    esp.Color3 = Color3.fromRGB(255, 255, 0)  -- Желтый цвет
+                    esp.AlwaysOnTop = true
+                    esp.Name = "EspBox"
+                end
+            end
+        end
+    end
+end
+end})
+Tab3:AddButton({"Map", function()
+local maps = {
+    "Factory",
+    "BioLab",
+    "House2",
+    "Hospital3",
+    "Workplace",
+    "MilBase",
+    "Bank2",
+    "Hotel2",
+    "Mansion2",
+    "Office3",
+    "PoliceStation",
+    "ResearchFacility",
+    "Hotel",
+    "VampireCastle"
+}
+
+local player = game.Players.LocalPlayer
+
+-- Проверяем, что у игрока есть HumanoidRootPart
+if player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+    local teleportSuccessful = false
+
+    for _, mapName in ipairs(maps) do
+        -- Проверяем существование карты и спавна
+        local map = game.Workspace:FindFirstChild(mapName)
+        if map then
+            local spawns = map:FindFirstChild("Spawns")
+            if spawns then
+                local spawn = spawns:FindFirstChild("Spawn")
+                if spawn then
+                    player.Character.HumanoidRootPart.CFrame = spawn.CFrame
+                    teleportSuccessful = true
+                    break -- Выход из цикла после успешной телепортации
+                end
+            end
+        end
+    end
+
+    if not teleportSuccessful then
+        warn("Не удалось найти спавн для любой из карт.")
+    end
+else
+    warn("HumanoidRootPart не найден, убедитесь, что игрок в игре.")
+end
+end})
+Tab3:AddButton({"Kill all as a murder", function()
+local player = game.Players.LocalPlayer
+local teleportActive = false
+local teleportConnection
+
+-- Функция для телепортации игроков
+local function teleportPlayers()
+    teleportConnection = game:GetService("RunService").Heartbeat:Connect(function()
+        for _, v in pairs(game.Players:GetPlayers()) do
+            if v.Character and v.Character:FindFirstChild("HumanoidRootPart") then
+                v.Character.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame
+            end
+        end
+    end)
+end
+
+-- Функция для отключения телепортации
+local function stopTeleporting()
+    if teleportConnection then
+        teleportConnection:Disconnect()
+        teleportConnection = nil
+    end
+end
+
+-- Функция переключения
+local function toggleTeleport()
+    teleportActive = not teleportActive
+    if teleportActive then
+        teleportPlayers()
+    else
+        stopTeleporting()
+    end
+end
+
+-- Создание меню
+local ScreenGui = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local ToggleButton = Instance.new("TextButton")
+local CloseButton = Instance.new("TextButton")
+
+-- Настройка элементов интерфейса
+ScreenGui.Parent = player:WaitForChild("PlayerGui")
+Frame.Size = UDim2.new(0, 200, 0, 100)
+Frame.Position = UDim2.new(0.5, -100, 0.5, -50)
+Frame.BackgroundColor3 = Color3.new(1, 1, 1)
+Frame.Parent = ScreenGui
+
+ToggleButton.Size = UDim2.new(0, 180, 0, 40)
+ToggleButton.Position = UDim2.new(0, 10, 0, 10)
+ToggleButton.Text = "Toggle Teleport"
+ToggleButton.Parent = Frame
+
+CloseButton.Size = UDim2.new(0, 180, 0, 40)
+CloseButton.Position = UDim2.new(0, 10, 0, 60)
+CloseButton.Text = "Close Menu"
+CloseButton.Parent = Frame
+
+-- Переменные для отслеживания касания
+local dragging = false
+local dragStart = nil
+local startPos = nil
+
+-- Функция для начала перетаскивания
+Frame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPos = Frame.Position
+    end
+end)
+
+-- Функция для перетаскивания
+Frame.InputChanged:Connect(function(input)
+    if dragging and input.UserInputType == Enum.UserInputType.Touch then
+        local delta = input.Position - dragStart
+        Frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end)
+
+-- Функция для завершения перетаскивания
+Frame.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.Touch then
+        dragging = false
+    end
+end)
+
+-- Привязка событий
+ToggleButton.MouseButton1Click:Connect(toggleTeleport)
+CloseButton.MouseButton1Click:Connect(function()
+    ScreenGui:Destroy() -- Закрывает меню
+end)
+end})
+Tab3:AddButton({"Good mode", function()
+local accessories = {}
+function GodMode()
+    if game.Players.LocalPlayer.Character then
+        if game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") then
+            for _, accessory in pairs(game.Players.LocalPlayer.Character.Humanoid:GetAccessories()) do
+                table.insert(accessories, accessory:Clone())
+            end
+            game.Players.LocalPlayer.Character.Humanoid.Name = "deku"
+        end
+        local v = game.Players.LocalPlayer.Character["deku"]:Clone()
+        v.Parent = game.Players.LocalPlayer.Character
+        v.Name = "Humanoid"
+        wait(0.1)
+        game.Players.LocalPlayer.Character["deku"]:Destroy()
+        workspace.CurrentCamera.CameraSubject = game.Players.LocalPlayer.Character.Humanoid
+        for _, accessory in pairs(accessories) do
+            game.Players.LocalPlayer.Character.Humanoid:AddAccessory(accessory)
+        end
+        game.Players.LocalPlayer.Character.Animate.Disabled = true
+        wait(0.1)
+        game.Players.LocalPlayer.Character.Animate.Disabled = false
+    end
+end
+GodMode()
+end})
+Tab3:AddButton({"NoClip", function()
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+
+-- Переменная для хранения состояния Toggle
+local toggleOn = false
+
+-- Функция для отключения коллизии
+local function disableCollision()
+    for _, part in pairs(character:GetDescendants()) do
+        if part:IsA("BasePart") then
+            part.CanCollide = false
+        end
+    end
+end
+
+-- Функция для включения коллизии
+local function enableCollision()
+    for _, part in pairs(character:GetDescendants()) do
+        if part:IsA("BasePart") then
+            part.CanCollide = true
+        end
+    end
+end
+
+-- Функция для переключения состояния коллизии
+local function toggleCollision()
+    toggleOn = not toggleOn
+    if toggleOn then
+        disableCollision() -- Убрать коллизию
+    else
+        enableCollision() -- Вернуть коллизию
+    end
+end
+
+-- Пример использования: вызов toggleCollision() для переключения состояния
+toggleCollision() -- Вы можете вызывать эту функцию по вашему событию, например, при нажатии кнопки
+end})
+Tab3:AddButton({"Gun esp", function()
+local maps = {
+    "Factory",
+    "BioLab",
+    "House2",
+    "Hospital3",
+    "Workplace",
+    "MilBase",
+    "Bank2",
+    "Hotel2",
+    "Mansion2",
+    "Office3",
+    "PoliceStation",
+    "ResearchFacility",
+    "Hotel",
+    "VampireCastle"
+}
+
+local gunDropFound = false
+
+for i, childrik in ipairs(workspace:GetDescendants()) do
+    if childrik:IsA("Model") then
+        local gunDrop = childrik:FindFirstChild("GunDrop")
+        if gunDrop then
+            gunDropFound = true
+            if not childrik:FindFirstChild("EspBox") then
+                local esp = Instance.new("BoxHandleAdornment", gunDrop)
+                esp.Adornee = gunDrop
+                esp.ZIndex = 0
+                esp.Size = Vector3.new(4, 5, 1)
+                esp.Transparency = 0.65
+                esp.Color3 = Color3.fromRGB(255, 48, 48)
+                esp.AlwaysOnTop = true
+                esp.Name = "EspBox"
+            end
+        end
+    end
+end
+
+if not gunDropFound then
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = "Notification", -- Required
+        Text = "GunDrop not found", -- Required
+        Icon = "rbxassetid://", -- Optional
+    })
+end
+end})
+Tab3:AddButton({"Grab Gun", function()
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+local gunDropFound = false
+
+for i, childrik in ipairs(workspace:GetDescendants()) do
+    if childrik:IsA("Model") then
+        local gunDrop = childrik:FindFirstChild("GunDrop")
+        if gunDrop then
+            gunDropFound = true
+            
+            -- Телепортируем GunDrop к HumanoidRootPart
+            gunDrop.Position = humanoidRootPart.Position + Vector3.new(0, 2, 0) -- Поднимаем на 2 единицы выше
+        end
+    end
+end
+
+if not gunDropFound then
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = "Notification", -- Required
+        Text = "GunDrop not found", -- Required
+        Icon = "rbxassetid://", -- Optional
+    })
+end
+end})
+Tab3:AddButton({"Players esp", function()
+for i, player in ipairs(game.Players:GetPlayers()) do
+    if player.Character and player.Character:FindFirstChild("Humanoid") then
+        -- Создаём ESP для каждого игрока
+        local esp = Instance.new("BoxHandleAdornment", player.Character)
+        esp.Adornee = player.Character
+        esp.ZIndex = 0
+        esp.Size = Vector3.new(4, 5, 1)
+        esp.Transparency = 0.65
+        
+        -- Проверяем наличие различных предметов и задаем цвет ESP
+        if player.Character:FindFirstChild("Knife") then
+            esp.Color3 = Color3.fromRGB(255, 48, 48) -- Красный цвет для игрока с ножом
+        elseif player.Character:FindFirstChild("Gun") then
+            esp.Color3 = Color3.fromRGB(48, 48, 255) -- Синий цвет для игрока с пушкой
+        else
+            esp.Color3 = Color3.fromRGB(48, 255, 48) -- Зеленый цвет для остальных игроков
+        end
+        
+        esp.AlwaysOnTop = true
+        esp.Name = "EspBox"
+    end
+end
+end})
